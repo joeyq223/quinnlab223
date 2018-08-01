@@ -36,7 +36,7 @@ config.vm.define "lab2-obiwankenobi" do |subconfig|
    add-apt-repository --yes ppa:saltstack/salt
    apt-get update -y
    apt-get install -y salt-minion
-   useradd joey ; echo -e "matrix54\nmatrix54" | passwd joey
+   useradd joey ; echo -e "xxxxx\nxxxxxx" | passwd joey
    echo 'joey ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
    echo 'master: salt' >> /etc/salt/minion
    echo '10.0.0.201 salt' >> /etc/hosts
