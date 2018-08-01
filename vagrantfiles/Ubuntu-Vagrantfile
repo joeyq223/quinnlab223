@@ -1,0 +1,45 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Every Vagrant development environment requires a box. You can search for
+# boxes at https://atlas.hashicorp.com/search.
+BOX_IMAGE = "bento/ubuntu-16.04"
+
+Vagrant.configure("2") do |config|
+  config.vm.define "lab2-Yoda" do |subconfig|
+    subconfig.vm.box = BOX_IMAGE
+    subconfig.vm.hostname = "lab2-Yoda"
+    subconfig.vm.network "public_network", bridge: "eno1", ip:"10.0.0.101"
+  config.vm.provision "shell",
+    run: "always",
+    inline: "route add default gw 10.0.0.1"
+  end
+  config.vm.define "lab2-quigonjin" do |subconfig|
+    subconfig.vm.box = BOX_IMAGE
+    subconfig.vm.hostname = "lab2-quigonjin"
+    subconfig.vm.network "public_network", bridge: "eno1", ip:"10.0.0.102"
+  config.vm.provision "shell",
+    run: "always",
+    inline: "route add default gw 10.0.0.1"
+  end
+config.vm.define "lab2-obiwankenobi" do |subconfig|
+    subconfig.vm.box = BOX_IMAGE
+    subconfig.vm.hostname = "lab2-obiwankenobi"
+    subconfig.vm.network "public_network", bridge: "eno1", ip:"10.0.0.103"
+  config.vm.provision "shell",
+    run: "always",
+    inline: "route add default gw 10.0.0.1"  
+  end
+
+# Install salt on all machines  
+  config.vm.provision "shell", inline: <<-SHELL
+   add-apt-repository --yes ppa:saltstack/salt
+   apt-get update -y
+   apt-get install -y salt-minion
+   useradd joey ; echo -e "matrix54\nmatrix54" | passwd joey
+   echo 'joey ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
+   echo 'master: salt' >> /etc/salt/minion
+   echo '10.0.0.201 salt' >> /etc/hosts
+   salt-minion -d
+  SHELL
+end
